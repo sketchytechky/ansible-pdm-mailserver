@@ -380,6 +380,8 @@
 - name: Gather AWS facts
   action: ec2_facts
   register: ec2_vars
+  when: ansible_ec2_instance_id is defined
+    and ansible_pdm_mailserver_aws_r53_zone
 
 - name: Ensures S3 backup and restore scripts
   become: yes
@@ -403,6 +405,8 @@
     name: Backup dovecot
     minute: 0
     weekday: 1-7
+  when: ansible_ec2_instance_id is defined
+    and ansible_pdm_mailserver_aws_r53_zone
 
 - name: Restore mail from s3
   become: yes
