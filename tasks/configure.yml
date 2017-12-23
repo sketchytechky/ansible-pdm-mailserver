@@ -14,15 +14,6 @@
     state: started
   when: ansible_pdm_mailserver_db_mysql_install
 
-- name: Create database for mail server
-  mysql_db:
-    login_host: "{{ ansible_pdm_mailserver_db_host }}"
-    login_user: "{{ ansible_pdm_mailserver_db_admin_username }}"
-    login_password: "{{ ansible_pdm_mailserver_db_admin_password }}"
-    name: "{{ ansible_pdm_mailserver_db_database }}"
-    state: present
-  register: ansible_pdm_mailserver_db_created
-
 - name: Create database user for mail server
   mysql_user:
     append_privs: yes
@@ -34,6 +25,15 @@
     state: present
     host: "%"
     priv: "{{ ansible_pdm_mailserver_db_database }}.*:ALL"
+
+- name: Create database for mail server
+  mysql_db:
+    login_host: "{{ ansible_pdm_mailserver_db_host }}"
+    login_user: "{{ ansible_pdm_mailserver_db_admin_username }}"
+    login_password: "{{ ansible_pdm_mailserver_db_admin_password }}"
+    name: "{{ ansible_pdm_mailserver_db_database }}"
+    state: present
+  register: ansible_pdm_mailserver_db_created
 
 - name: Copy import.sql
   template:
