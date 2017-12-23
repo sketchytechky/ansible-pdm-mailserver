@@ -555,7 +555,7 @@
     state: started
   when: ansible_pdm_mailserver_redis_install
 
-- name: Start redis
+- name: Start nginx
   service:
     name: nginx
     state: started
