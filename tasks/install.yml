@@ -139,6 +139,7 @@
     - /etc/nginx/sites-available
   notify:
     - reload nginx
+  when: ansible_pdm_mailserver_nginx_install
 
 - name: Remove default Nginx site
   file:
@@ -150,6 +151,7 @@
     - /etc/nginx/sites-available/default
   notify:
     - reload nginx
+  when: ansible_pdm_mailserver_nginx_install
 
 - name: Create Nginx config
   copy:
@@ -160,6 +162,7 @@
     src: etc_nginx_nginx.conf
   notify:
     - reload nginx
+  when: ansible_pdm_mailserver_nginx_install
 
 - name: Create postfix maps directory
   file:

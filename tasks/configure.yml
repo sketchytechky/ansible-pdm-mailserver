@@ -327,6 +327,7 @@
     dest: /etc/nginx/sites-available/autoconfig.conf
   notify:
     - reload nginx
+  when: ansible_pdm_mailserver_nginx_install
 
 - name: Enable autoconfig site
   file:
@@ -335,6 +336,7 @@
     state: link
   notify:
     - reload nginx
+  when: ansible_pdm_mailserver_nginx_install
 
 - name: Fix Fail2Ban Systemd backend
   ini_file:
@@ -553,6 +555,12 @@
     state: started
   when: ansible_pdm_mailserver_redis_install
 
+- name: Start redis
+  service:
+    name: nginx
+    state: started
+  when: ansible_pdm_mailserver_nginx_install
+
 - name: Start core services
   service:
     name: "{{ item }}"
@@ -564,4 +572,3 @@
     - opendkim
     - postfix
     - dovecot
-    - nginx
