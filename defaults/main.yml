@@ -17,6 +17,7 @@ ansible_pdm_mailserver_db_admin_username: "root"
 ansible_pdm_mailserver_db_database: "mailserver"
 ansible_pdm_mailserver_db_host: 127.0.0.1
 ansible_pdm_mailserver_db_mysql_install: true
+ansible_pdm_mailserver_nginx_install: true
 ansible_pdm_mailserver_db_password: "password"
 ansible_pdm_mailserver_db_username: "mailuser"
 
