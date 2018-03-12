@@ -327,6 +327,7 @@
     dest: /etc/nginx/sites-available/autoconfig.conf
   notify:
     - reload nginx
+  when: ansible_pdm_mailserver_nginx_install
 
 - name: Enable autoconfig site
   file:
@@ -335,6 +336,7 @@
     state: link
   notify:
     - reload nginx
+  when: ansible_pdm_mailserver_nginx_install
 
 - name: Fix Fail2Ban Systemd backend
   ini_file:
@@ -380,6 +382,8 @@
 - name: Gather AWS facts
   action: ec2_facts
   register: ec2_vars
+  when: ansible_ec2_instance_id is defined
+    and ansible_pdm_mailserver_aws_r53_zone
 
 - name: Ensures S3 backup and restore scripts
   become: yes
@@ -403,6 +407,8 @@
     name: Backup dovecot
     minute: 0
     weekday: 1-7
+  when: ansible_ec2_instance_id is defined
+    and ansible_pdm_mailserver_aws_r53_zone
 
 - name: Restore mail from s3
   become: yes
@@ -549,6 +555,12 @@
     state: started
   when: ansible_pdm_mailserver_redis_install
 
+- name: Start nginx
+  service:
+    name: nginx
+    state: started
+  when: ansible_pdm_mailserver_nginx_install
+
 - name: Start core services
   service:
     name: "{{ item }}"
@@ -560,4 +572,3 @@
     - opendkim
     - postfix
     - dovecot
-    - nginx
